@@ -25,7 +25,7 @@ namespace TheMess.customs {
         public override List<IApplianceProperty> Properties => new List<IApplianceProperty> {
             new CItemHolder(),
             new CGunProvider(),
-            KitchenPropertiesUtils.GetCItemProvider(Refs.Gun.ID, 1, 10, false, false, true, false, false, true, false)
+            KitchenPropertiesUtils.GetCItemProvider(Refs.Gun.ID, 1, 1, false, false, true, false, false, true, false)
         };
 
         public override void SetupPrefab(GameObject prefab) {

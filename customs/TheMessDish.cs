@@ -8,19 +8,19 @@ using UnityEngine;
 namespace BlargleBrew.cards {
 
     public class TheMessDish : CustomDish {
+#if DEBUG
+        public static float WEIGHT = 10f;
+        public override bool IsAvailableAsLobbyOption => true;
+#else
+        public static float WEIGHT = 0.1f;
+        public override bool IsAvailableAsLobbyOption => false;
+#endif
 
         public override string UniqueNameID => "TheMess - TheMess";
         public override DishType Type => DishType.Base;
         public override GameObject DisplayPrefab => TheMessMod.bundle.LoadAsset<GameObject>("Gun");
         public override GameObject IconPrefab => TheMessMod.bundle.LoadAsset<GameObject>("Gun");
         public override bool IsUnlockable => false;
-
-        public override bool IsAvailableAsLobbyOption =>
-            #if DEBUG
-                true;
-            #else
-                false;
-            #endif
 
         public override bool RequiredNoDishItem => true;
 
@@ -29,11 +29,11 @@ namespace BlargleBrew.cards {
         };
 
         public override List<Dish.MenuItem> ResultingMenuItems => new List<Dish.MenuItem>() {
-            new Dish.MenuItem() { Phase = MenuPhase.Main, Item = Refs.Gun, Weight = 0.1f },
+            new Dish.MenuItem() { Phase = MenuPhase.Main, Item = Refs.Gun, Weight = WEIGHT },
         };
 
         public override Dictionary<Locale, string> Recipe => new Dictionary<Locale, string> {
-            { Locale.English, "Grab a boot, fill it three times with stout, and serve. Serves up to 4 customers." }
+            { Locale.English, "" }
         };
 
         public override List<(Locale, UnlockInfo)> InfoList => new List<(Locale, UnlockInfo)> {

@@ -2,6 +2,7 @@
 using KitchenData;
 using KitchenLib.Customs;
 using KitchenLib.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheMess.customs {
@@ -16,6 +17,10 @@ namespace TheMess.customs {
         public override bool IsConsumedByCustomer => false;
         public override int MaxOrderSharers => 4;
         public override Item DirtiesTo => Refs.Gun;
+
+        public override List<IItemProperty> Properties => new List<IItemProperty>() {
+            new CGun { },
+        };
 
         public override void OnRegister(Item item) {
             MaterialUtils.ApplyMaterial(Prefab, "Gun", CommonMaterials.metalBlack);

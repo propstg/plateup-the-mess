@@ -21,9 +21,9 @@ namespace TheMess.systems {
         }
 
         protected override void OnUpdate() {
-            var menuItemEntities = menuItemQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
-            var entities = gunProviderQuery.ToEntityArray(Unity.Collections.Allocator.TempJob);
-            //var hasCard = GameInfo.AllCurrentCards.Select(card => card.CardID).Any(cardId => cardId == Refs.TheMessDish.ID);
+            TheMessMod.Log("Activate onupdate");
+            using var menuItemEntities = menuItemQuery.ToEntityArray(Unity.Collections.Allocator.Temp);
+            using var entities = gunProviderQuery.ToEntityArray(Unity.Collections.Allocator.TempJob);
 
             var item = Refs.TheMessDish.UnlocksMenuItems.First();
 
@@ -39,9 +39,6 @@ namespace TheMess.systems {
                 EntityManager.AddComponent<CMenuItemMain>(entity);
                 Set<STheMessIsActive>();
             }
-
-            entities.Dispose();
-            menuItemEntities.Dispose();
         }
     }
 }
