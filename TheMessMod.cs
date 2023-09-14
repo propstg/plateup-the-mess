@@ -12,7 +12,7 @@ namespace blargle.TheMess {
 
         public const string MOD_ID = "blargle.TheMess";
         public const string MOD_NAME = "TheMess";
-        public const string MOD_VERSION = "0.0.0";
+        public const string MOD_VERSION = "0.0.1";
         public const string MOD_AUTHOR = "blargle";
 
         public static AssetBundle bundle;

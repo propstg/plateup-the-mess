@@ -75,38 +75,9 @@ namespace TheMess.systems {
                         continue;
                     }
 
-                    TheMessMod.Log("GUN DELIVERED");
-                    if (Require<CPosition>(entity, out CPosition center)) {
-                        makePing(center);
-                        for (int times = 0; times < 3; times++) {
-                            for (int x = -2; x < 2; x++) {
-                                for (float z = -2; z < 2; z++) {
-                                    Vector3 position = center - new Vector3(x, 0, z);
-                                    Entity mess = EntityManager.CreateEntity();
-                                    EntityManager.AddComponentData<CPosition>(mess, position);
-                                    EntityManager.AddComponentData<CMessRequest>(mess, new CMessRequest() {
-                                        ID = AssetReference.CustomerMess
-                                    });
-                                    CSoundEvent.Create(EntityManager, SoundEvent.MessCreated);
-                                }
-                            }
-                        }
-                    } else {
-                        TheMessMod.Log("NO POSITION?");
-                    }
-
-                    if (Require<CGun>(holder.HeldItem, out CGun gun)) {
-                        TheMessMod.Log($"GUN PLACED BY PLAYER {gun.lastHeldByPlayer}");
-                        PlayerInfo playerInfo = Players.Main.Get(gun.lastHeldByPlayer);
-                        PlayerProfile profile = playerInfo.Profile;
-                        while (profile.Cosmetics.Count > 0) {
-                            profile.Cosmetics.RemoveAt(0);
-                        }
-                        profile.Cosmetics.Add(PlayerCosmeticReferences.GhostHat);
-                        Players.Main.RequestProfileUpdate(gun.lastHeldByPlayer, profile);
-                    }
-
-                    //TODO  kill the player
+                    TheMessMod.Log("DELIVERED");
+                    doLocationBasedEffects(entity);
+                    killPlayer(holder);
                     removeDish();
                     Set<CGroupStartLeaving>(entity);
                     Set<CGroupStateChanged>(entity);
@@ -159,6 +130,56 @@ namespace TheMess.systems {
             return false;
         }
 
+        private void doLocationBasedEffects(Entity entity) {
+            if (Require<CPosition>(entity, out CPosition center)) {
+                makePing(center);
+                makeMess(center);
+            } else {
+                TheMessMod.Log("NO POSITION?");
+            }
+        }
+
+        private void makeMess(CPosition center) {
+            for (int times = 0; times < 3; times++) {
+                for (int x = -2; x < 2; x++) {
+                    for (float z = -2; z < 2; z++) {
+                        Vector3 position = center - new Vector3(x, 0, z);
+                        Entity mess = EntityManager.CreateEntity();
+                        EntityManager.AddComponentData<CPosition>(mess, position);
+                        EntityManager.AddComponentData<CMessRequest>(mess, new CMessRequest() {
+                            ID = AssetReference.CustomerMess
+                        });
+                        CSoundEvent.Create(EntityManager, SoundEvent.MessCreated);
+                    }
+                }
+            }
+        }
+
+        private void makePing(CPosition position) {
+            var entity = EntityManager.CreateEntity();
+            Set(entity, new CRequiresView() { Type = ViewType.Ping });
+            Set(entity, new CPosition { Position = position });
+            Set(entity, new CLifetime() { RemainingLife = 0.3f });
+            Set(entity, new CPlayerPing() {
+                Colour = new CPlayerColour() {
+                    Color = new Color(175f, 175f, 115f, 0.5f)
+                }
+            });
+        }
+
+        private void killPlayer(CItemHolder holder) {
+            if (Require<CGun>(holder.HeldItem, out CGun gun) && gun.lastHeldByPlayer != default) {
+                TheMessMod.Log($"ITEM PLACED BY PLAYER {gun.lastHeldByPlayer}");
+                PlayerInfo playerInfo = Players.Main.Get(gun.lastHeldByPlayer);
+                PlayerProfile profile = playerInfo.Profile;
+                while (profile.Cosmetics.Count > 0) {
+                    profile.Cosmetics.RemoveAt(0);
+                }
+                profile.Cosmetics.Add(PlayerCosmeticReferences.GhostHat);
+                Players.Main.RequestProfileUpdate(gun.lastHeldByPlayer, profile);
+            }
+        }
+
         private void removeDish() {
             TheMessMod.Log("Attempting to remove dish...");
             using var entities = menuItemsQuery.ToEntityArray(Allocator.TempJob);
@@ -166,23 +187,11 @@ namespace TheMess.systems {
 
             for (int i = 0; i < entities.Length; i++) {
                 if (Require(entities[i], out CMenuItem menuItem) && (menuItem.Item == itemId)) {
-                    TheMessMod.Log("Found gun dish. Zeroing weight?");
+                    TheMessMod.Log("Found dish. Zeroing weight?");
                     menuItem.Weight = 0;
                     SetComponent<CMenuItem>(entities[i], menuItem);
                 }
             }
-        }
-        
-        private void makePing(CPosition position) {
-            var entity = EntityManager.CreateEntity();
-            Set(entity, new CRequiresView() { Type = ViewType.Ping });
-            Set(entity, new CPosition { Position = position } );
-            Set(entity, new CLifetime() { RemainingLife = 0.3f });
-            Set(entity, new CPlayerPing() { 
-                Colour = new CPlayerColour() { 
-                    Color = new Color(175f, 175f, 115f, 0.5f) 
-                } 
-            });
         }
     }
 }

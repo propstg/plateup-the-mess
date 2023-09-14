@@ -32,12 +32,10 @@ namespace TheMess.systems {
                 removeGunProviders();
                 removeGuns();
 
-                TheMessMod.Log("removing served");
                 Clear<STheMessHasBeenServed>();
-                TheMessMod.Log("removing active");
                 Clear<STheMessIsActive>();
                 TheMessMod.Log("done in deactivate onupdate");
-            }catch(Exception e) {
+            } catch (Exception e) {
                 TheMessMod.Log("caught exception?");
                 TheMessMod.Log(e);
             }
@@ -50,7 +48,7 @@ namespace TheMess.systems {
 
             for (int i = 0; i < entities.Length; i++) {
                 if (Require(entities[i], out CMenuItem menuItem) && (menuItem.Item == itemId)) {
-                    TheMessMod.Log("Found gun dish. Removing?");
+                    TheMessMod.Log("Found dish. Removing");
                     EntityManager.DestroyEntity(entities[i]);
                 }
             }

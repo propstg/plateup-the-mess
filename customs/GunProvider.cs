@@ -22,6 +22,7 @@ namespace TheMess.customs {
                 Description = "Provides a gun"
             })
         };
+
         public override List<IApplianceProperty> Properties => new List<IApplianceProperty> {
             new CItemHolder(),
             new CGunProvider(),

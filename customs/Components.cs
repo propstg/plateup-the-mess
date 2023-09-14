@@ -9,7 +9,6 @@ namespace TheMess.customs {
     }
 
     public struct CGunProvider : IApplianceProperty, IModComponent { }
-    public struct CGunProviderRemoveAtEndOfDay : IApplianceProperty, IModComponent { }
     public struct STheMessHasBeenServed : IComponentData, IModComponent { }
     public struct STheMessIsActive : IComponentData, IModComponent { }
 }

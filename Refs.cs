@@ -3,8 +3,8 @@ using KitchenData;
 using KitchenLib.Utils;
 using TheMess.customs;
 
-namespace blargle.TheMess
-{
+namespace blargle.TheMess {
+
     public class Refs {
 
         public static Item Gun => GDOUtils.GetCastedGDO<Item, Gun>();

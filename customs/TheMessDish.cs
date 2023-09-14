@@ -8,6 +8,7 @@ using UnityEngine;
 namespace BlargleBrew.cards {
 
     public class TheMessDish : CustomDish {
+
 #if DEBUG
         public static float WEIGHT = 10f;
         public override bool IsAvailableAsLobbyOption => true;
@@ -47,7 +48,7 @@ namespace BlargleBrew.cards {
         public override void SetupDisplayPrefab(GameObject prefab) {
             setupCommonDisplayPrefab(prefab);
         }
-        
+
         private void setupCommonDisplayPrefab(GameObject prefab) {
             MaterialUtils.ApplyMaterial(prefab, "Gun", CommonMaterials.metalBlack);
         }
