@@ -14,7 +14,7 @@ namespace TheMess.customs {
         public override string UniqueNameID => "TheMess Gun Provider";
         public override PriceTier PriceTier => PriceTier.Free;
         public override bool IsPurchasable => true;
-        public override ShoppingTags ShoppingTags => ShoppingTags.Cooking | ShoppingTags.Misc;
+        public override ShoppingTags ShoppingTags => ShoppingTags.FrontOfHouse;
         public override GameObject Prefab => TheMessMod.bundle.LoadAsset<GameObject>("GunProvider");
         public override List<(Locale, ApplianceInfo)> InfoList => new List<(Locale, ApplianceInfo)> {
             (Locale.English, new ApplianceInfo() {
